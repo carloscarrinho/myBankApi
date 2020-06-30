@@ -4,6 +4,7 @@ const routes = express.Router();
 import AccountController from './controllers/AccountController.js';
 
 routes.get('/', AccountController.index);
-routes.post('/deposit', AccountController.deposit);
+routes.post('/depositar', AccountController.deposit);
+routes.post('/sacar', AccountController.withdraw);
 
 export default routes;
