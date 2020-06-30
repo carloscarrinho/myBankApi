@@ -28,7 +28,6 @@ export default {
         }
       );
       return res.status(200).json(updatedAccount);
-
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "Internal error" });
@@ -52,10 +51,22 @@ export default {
         { new: true }
       );
       return res.status(200).json(updatedAccount);
-
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "Internal error" });
+    }
+  },
+
+  read: async (req, res) => {
+    const { agencia, conta } = req.body;
+    try {
+      const account = await Account.findOne({ agencia, conta });
+      if (!account) return res.status(404).json({ error: "Account not found" });
+      const { name, balance } = account;
+      return res.status(200).json({ name, balance });
+    } catch (err) {
+      console.log(err);
+      return res.status(200).json({ error: "Internal error" });
     }
   },
 };
