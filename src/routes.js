@@ -1,7 +1,9 @@
 import express from 'express';
-
 const routes = express.Router();
 
-routes.get('/', (req, res) => res.send("<h1>Hello Routes JS</h1>"));
+import AccountController from './controllers/AccountController.js';
+
+routes.get('/', AccountController.index);
+routes.post('/deposit', AccountController.deposit);
 
 export default routes;
