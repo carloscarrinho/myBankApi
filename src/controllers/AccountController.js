@@ -69,4 +69,20 @@ export default {
       return res.status(200).json({ error: "Internal error" });
     }
   },
+
+  delete: async (req, res) => {
+    const { agencia, conta } = req.body;
+    try {
+      const account = await Account.findOne({ agencia, conta });
+      if (!account) return res.status(404).json({ error: "Account not found" });
+
+      await Account.findOneAndDelete({ agencia, conta });
+
+      const numbOfAccounts = await Account.find({ agencia }).countDocuments();
+      return res.status(200).json(numbOfAccounts);
+    } catch (err) {
+      console.log(err);
+      return res.status(200).json({ error: "Internal error" });
+    }
+  },
 };
