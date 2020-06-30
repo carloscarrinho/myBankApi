@@ -1,0 +1,20 @@
+{
+  "name": "trabalho-pratico",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.20"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon --experimental-modules ./src/index.js",
+    "start": "node --experimental-modules ./src/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
