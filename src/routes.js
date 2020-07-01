@@ -9,6 +9,6 @@ routes.post('/sacar', AccountController.withdraw);
 routes.post('/consultar-saldo', AccountController.read);
 routes.post('/deletar-conta', AccountController.delete);
 routes.post('/transferir', AccountController.transfer);
-routes.post('/media', AccountController.average);
+routes.post('/media', AccountController.calculateAverage);
 
 export default routes;

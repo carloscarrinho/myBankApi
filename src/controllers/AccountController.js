@@ -135,31 +135,48 @@ export default {
         { new: true }
       );
       return res.status(200).json(newOrigAccount);
-
     } catch (err) {
       console.log(err);
       return res.status(200).json({ error: "Internal error" });
     }
   },
 
-  average: async (req, res) => {
+  calculateAverage: async (req, res) => {
     const { agencia } = req.body;
     try {
-      const accounts = await Account.find({agencia});
-      if(!accounts) return res.status(404).json({error: "Agency not found"});
+      const accounts = await Account.find({ agencia });
+      if (!accounts) return res.status(404).json({ error: "Agency not found" });
 
       const total = accounts.reduce((acc, account) => {
-        return acc + account.balance; 
+        return acc + account.balance;
       }, 0);
 
-      const formattedTotal = total.toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
+      const formattedTotal = total.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      });
       const average = total / accounts.length;
+      return res.status(200).json({ agencia, total: formattedTotal, average });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal error" });
+    }
+  },
 
-      return res.status(200).json({agencia, total: formattedTotal, average});
+  smaller: async (req, res) => {
+    const { clients } = req.body;
+    if (clients <= 0)
+      return res
+        .status(403)
+        .json({ denied: "Please enter a number greater than zero" });
+        
+    try {
+      const accounts = await find({}).limit(clients);
+      return res.status(200).json(accounts);
 
     } catch (err) {
       console.log(err);
-      return res.status(500).json({error: "Internal error"});
+      return res.status(500).json({ error: "Internal error" });
     }
-  }
+  },
 };
