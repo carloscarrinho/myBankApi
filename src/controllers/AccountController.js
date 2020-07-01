@@ -163,7 +163,7 @@ export default {
     }
   },
 
-  smaller: async (req, res) => {
+  seekPoorest: async (req, res) => {
     const { clients } = req.body;
     if (clients <= 0)
       return res
@@ -171,7 +171,7 @@ export default {
         .json({ denied: "Please enter a number greater than zero" });
         
     try {
-      const accounts = await find({}).limit(clients);
+      const accounts = await Account.find({}).sort({balance: 1}).limit(clients);
       return res.status(200).json(accounts);
 
     } catch (err) {
