@@ -11,5 +11,6 @@ routes.post('/deletar-conta', AccountController.delete);
 routes.post('/transferir', AccountController.transfer);
 routes.post('/media', AccountController.calculateAverage);
 routes.post('/pobres', AccountController.seekPoorest);
+routes.post('/ricos', AccountController.seekRichest);
 
 export default routes;

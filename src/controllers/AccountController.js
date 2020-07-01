@@ -169,11 +169,31 @@ export default {
       return res
         .status(403)
         .json({ denied: "Please enter a number greater than zero" });
-        
-    try {
-      const accounts = await Account.find({}).sort({balance: 1}).limit(clients);
-      return res.status(200).json(accounts);
 
+    try {
+      const accounts = await Account.find({})
+        .sort({ balance: 1 })
+        .limit(clients);
+      return res.status(200).json(accounts);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal error" });
+    }
+  },
+
+  seekRichest: async (req, res) => {
+    const { clients } = req.body;
+    if (clients <= 0)
+      return res
+        .status(403)
+        .json({ denied: "Please enter a number greater than zero" });
+
+    try {
+      const accounts = await Account.find({})
+        .sort({ balance: -1, name: 1 })
+        .limit(clients);
+      return res.status(200).json(accounts);
+      
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "Internal error" });
