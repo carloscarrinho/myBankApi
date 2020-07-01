@@ -141,4 +141,25 @@ export default {
       return res.status(200).json({ error: "Internal error" });
     }
   },
+
+  average: async (req, res) => {
+    const { agencia } = req.body;
+    try {
+      const accounts = await Account.find({agencia});
+      if(!accounts) return res.status(404).json({error: "Agency not found"});
+
+      const total = accounts.reduce((acc, account) => {
+        return acc + account.balance; 
+      }, 0);
+
+      const formattedTotal = total.toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
+      const average = total / accounts.length;
+
+      return res.status(200).json({agencia, total: formattedTotal, average});
+
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({error: "Internal error"});
+    }
+  }
 };
