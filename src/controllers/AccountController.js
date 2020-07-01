@@ -85,4 +85,60 @@ export default {
       return res.status(200).json({ error: "Internal error" });
     }
   },
+
+  transfer: async (req, res) => {
+    const { origin, destination, value } = req.body;
+    if (value <= 0)
+      return res.status(403).json({ denied: "Negative value not allowed" });
+
+    try {
+      const originAccount = await Account.findOne({ conta: origin });
+      if (!originAccount)
+        return res.status(404).json({ error: "Origin account not found" });
+
+      if (originAccount.balance <= value)
+        return res
+          .status(403)
+          .json({ denied: "No money enough to this transaction" });
+
+      const destinationAccount = await Account.findOne({ conta: destination });
+      if (!destinationAccount)
+        return res.status(404).json({ error: "Destination account not found" });
+
+      if (originAccount.agencia !== destinationAccount.agencia) {
+        const fee = 8;
+        const newOrigValue = originAccount.balance - (value + fee);
+        const newDestValue = destinationAccount.balance + value;
+        const newOrigAccount = await Account.findOneAndUpdate(
+          { conta: origin },
+          { balance: newOrigValue },
+          { new: true }
+        );
+        const newDestAccount = await Account.findOneAndUpdate(
+          { conta: destination },
+          { balance: newDestValue },
+          { new: true }
+        );
+        return res.status(200).json({ newOrigAccount, newDestAccount });
+      }
+
+      const newOrigValue = originAccount.balance - value;
+      const newDestValue = destinationAccount.balance + value;
+      const newOrigAccount = await Account.findOneAndUpdate(
+        { conta: origin },
+        { balance: newOrigValue },
+        { new: true }
+      );
+      await Account.findOneAndUpdate(
+        { conta: destination },
+        { balance: newDestValue },
+        { new: true }
+      );
+      return res.status(200).json(newOrigAccount);
+
+    } catch (err) {
+      console.log(err);
+      return res.status(200).json({ error: "Internal error" });
+    }
+  },
 };
