@@ -193,7 +193,33 @@ export default {
         .sort({ balance: -1, name: 1 })
         .limit(clients);
       return res.status(200).json(accounts);
-      
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal error" });
+    }
+  },
+
+  populatePrivateBankBranch: async (_, res) => {
+    try {
+      const accounts = await Account.find({}).sort({ balance: -1 });
+      const branchs = accounts.map((account) => account.agencia);
+      const uniqueBranchs = new Set(branchs);
+
+      let privateClients = [];
+      for (let i = 0; i < [...uniqueBranchs].length; i++) {
+        const richest = await Account.find({ agencia: [...uniqueBranchs][i] })
+          .sort({ balance: -1 })
+          .limit(1);
+
+        await Account.updateOne(
+          { name: richest[0].name },
+          { agencia: 99 },
+          { new: true }
+        );
+        privateClients.push(richest[0]);
+      }
+
+      return res.json(privateClients);
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "Internal error" });

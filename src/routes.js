@@ -12,5 +12,6 @@ routes.post('/transferir', AccountController.transfer);
 routes.post('/media', AccountController.calculateAverage);
 routes.post('/pobres', AccountController.seekPoorest);
 routes.post('/ricos', AccountController.seekRichest);
+routes.get('/agencia-private', AccountController.populatePrivateBankBranch);
 
 export default routes;
