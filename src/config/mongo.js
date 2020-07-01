@@ -6,6 +6,7 @@ export default {
   dbname: process.env.DBNAME,
   options: {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   }
 }
