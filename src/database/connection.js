@@ -7,7 +7,8 @@ import mongoose from 'mongoose';
 try {
   mongoose.connect('mongodb://localhost:27017/mybankapi-dev', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   });
   console.log("MongoDB Connected");
 
